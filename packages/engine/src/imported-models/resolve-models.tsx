@@ -47,7 +47,15 @@ export function resolveProjectModels(
       } else {
         devices[model.id] = {
           ...descriptor,
-          component: ({ state }) => <ImportedModelGeometry model={model} state={state} />,
+          // Modified: pass visual state and motion setting so Cover models can animate.
+          component: ({ state, visualState, reducedMotion }) => (
+            <ImportedModelGeometry
+              model={model}
+              state={state}
+              coverVisual={visualState}
+              reducedMotion={reducedMotion}
+            />
+          ),
           mountKind: model.placement === "wall" ? "wall" : "surface",
           supportedDomains: [model.profile],
           ...(model.profile === "light" && model.light
