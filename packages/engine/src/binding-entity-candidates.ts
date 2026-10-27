@@ -54,10 +54,7 @@ export const bindingEntityCandidates = ({
   if (
     !outsideRooms &&
     !roomAreaId &&
-    !(
-      (descriptor.kind === "opening-contact" || descriptor.kind === "opening-cover") &&
-      scope === "all-areas"
-    )
+    scope !== "all-areas"
   )
     return [];
   const homeWideCamera = isShareableCameraDescriptor(descriptor);

@@ -78,7 +78,13 @@ export const deviceMappingCandidates = ({
           (candidate) => candidate.slotId === slot.id,
         );
         if (!descriptor) continue;
-        const compatible = bindingEntityCandidates({ descriptor, roomId, profile, runtime }).filter(
+        const compatible = bindingEntityCandidates({
+          descriptor,
+          roomId,
+          profile,
+          runtime,
+          scope: "all-areas",
+        }).filter(
           (candidate) =>
             runtime.entityRegistry.find((entry) => entry.entity_id === candidate.entityId)
               ?.device_id === haDevice.id,

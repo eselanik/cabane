@@ -114,6 +114,7 @@ export const validateRuntimeBindingProfile = (
         (roomId) => isObject(input.roomAreaIds) && typeof input.roomAreaIds[roomId] === "string",
       );
       if (
+        false && // Modified: rooms without a Home Assistant area may still hold connections.
         mappedRoomIds.length === 0 &&
         descriptor.roomIds.length > 0 &&
         descriptor.kind !== "opening-contact"

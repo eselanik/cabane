@@ -38,10 +38,7 @@ export function EntitySlotMappingRow({
     roomId: room.id,
     profile,
     runtime,
-    scope:
-      descriptor.kind === "opening-contact" || descriptor.kind === "opening-cover"
-        ? "all-areas"
-        : "mapped-area",
+    scope: "all-areas",
   });
   const currentCandidate = candidates.find((candidate) => candidate.entityId === current);
   return (
