@@ -179,7 +179,8 @@ const resolveEntity = ({
     if (
       descriptor.kind === "opening-contact"
         ? !isOpeningContactEntity(entityId, runtime)
-        : !descriptor.spec.compatibleDeviceClasses.includes(String(deviceClass))
+        : bindingDomainMatchRank(descriptor.spec, domain) === 0 &&
+          !descriptor.spec.compatibleDeviceClasses.includes(String(deviceClass))
     ) {
       issues.push(
         issue({
