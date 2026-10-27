@@ -45,7 +45,9 @@ export const entityMatchesBindingSlot = (
   bindingDomainMatchRank(descriptor.spec, entityDomain(entityId)) >= 0 &&
   (descriptor.kind === "opening-contact"
     ? isOpeningContactEntity(entityId, runtime)
-    : compatibleDeviceClass(descriptor.spec, entityId, runtime));
+    : // Modified: device-class limits only apply to entities of the slot's own type.
+      bindingDomainMatchRank(descriptor.spec, entityDomain(entityId)) > 0 ||
+      compatibleDeviceClass(descriptor.spec, entityId, runtime));
 
 const SHAREABLE_CAMERA_MODEL_IDS = new Set([
   "camera-screen",

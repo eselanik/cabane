@@ -143,7 +143,8 @@ export const validateRuntimeBindingProfile = (
         if (
           !(descriptor.kind === "opening-contact"
             ? isOpeningContactEntity(entityId, runtime)
-            : compatibleDeviceClass(descriptor.spec, entityId, runtime))
+            : bindingDomainMatchRank(descriptor.spec, entityDomain(entityId)) > 0 ||
+              compatibleDeviceClass(descriptor.spec, entityId, runtime))
         ) {
           add(
             "profile.device-class",
