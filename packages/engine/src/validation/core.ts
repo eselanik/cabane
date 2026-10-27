@@ -134,6 +134,7 @@ export const STABLE_MODELS = new Set([
   "thermometer",
   "motion-sensor",
   "motorized-blind",
+  "roller-shutter",
   "leak-sensor",
   "ceiling-fan",
   "table-fan",

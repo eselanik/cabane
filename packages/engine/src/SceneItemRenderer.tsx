@@ -188,7 +188,7 @@ function DeviceSceneItem({
       rotation={[0, transform.rotationYRadians, 0]}
       scale={scale}
       userData={{
-        walkCollider: item.modelId.startsWith("custom:") && item.placement.kind === "absolute",
+        walkCollider: false /* Modified: imported models mark their own parts (ImportedModel.tsx) */,
         deviceBindingId: item.id,
         deviceModel: item.modelId,
         visualState,
@@ -307,7 +307,7 @@ export const SceneItemRenderer = memo(function SceneItemRenderer({
       <group
         name={`scene-item-${item.id}`}
         userData={{
-          walkCollider: item.modelId.startsWith("custom:") && item.placement.kind === "absolute",
+          walkCollider: false /* Modified: imported models mark their own parts (ImportedModel.tsx) */,
         }}
         position={transform.position}
         rotation={[0, transform.rotationYRadians, 0]}

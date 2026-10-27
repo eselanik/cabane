@@ -113,6 +113,13 @@ export function ImportedModelGeometry({
     reducedMotion,
     invalidate,
   );
+  // Modified: each part of a floor model blocks walking on its own, so you can walk between them.
+  if (loaded.root && model.placement === "floor" && !loaded.root.userData.walkPartsMarked) {
+    loaded.root.userData.walkPartsMarked = true;
+    loaded.root.traverse((object) => {
+      if ((object as Mesh).isMesh) object.userData.walkCollider = true;
+    });
+  }
   const hash = model.asset.sha256,
     byteLength = model.asset.byteLength;
   useEffect(() => {
@@ -142,7 +149,12 @@ export function ImportedModelGeometry({
     };
   }, [hash, byteLength, invalidate]);
   const { normalization } = model;
-  const uniformScale = size[0] / normalization.size[0];
+  // Modified: stretch per axis so width, height and depth resize independently.
+  const axisScale = size.map((value, axis) => value / normalization.size[axis]) as [
+    number,
+    number,
+    number,
+  ];
   const center = useMemo(
     () =>
       normalization.bounds.min.map((n, axis) => (n + normalization.bounds.max[axis]) / 2) as [
@@ -154,7 +166,7 @@ export function ImportedModelGeometry({
   );
   return (
     <group
-      scale={uniformScale}
+      scale={axisScale}
       userData={{
         importedModelId: model.id,
         ...(loaded.error ? { modelAssetError: loaded.error } : {}),
