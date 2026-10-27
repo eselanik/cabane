@@ -32,7 +32,7 @@ export function resolveProjectModels(
         defaultRoomType: "living-room" as const,
         defaultSize: model.normalization.size,
         bounds: model.normalization.bounds,
-        resizePolicy: { kind: "uniform" as const },
+        resizePolicy: { kind: "axes" as const, axes: ["width", "height", "depth"] as const }, // Modified: free resizing
         preferredPlacement: model.placement === "floor" ? ("absolute" as const) : model.placement,
         outlineContact: false,
         complexity: model.complexity,
