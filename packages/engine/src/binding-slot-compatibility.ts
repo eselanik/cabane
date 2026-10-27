@@ -34,7 +34,7 @@ export const bindingDomainMatchRank = (spec: EntityBindingSlotSpec, domain: stri
     MANUAL_DOMAIN_ALTERNATIVES[expected]?.includes(domain),
   )
     ? 1
-    : -1;
+    : 2; // Modified: any other entity type may be connected manually (automatic matching uses rank 0 only).
 };
 
 export const entityMatchesBindingSlot = (
@@ -72,7 +72,13 @@ export const isShareableCameraDescriptor = (descriptor: BindingSlotDescriptor | 
     isShareableCameraSlot(descriptor.deviceModel, descriptor.spec),
   );
 
+/** Modified: any connection may use an entity from any Home Assistant area. */
 export const allowsCrossAreaEntityBinding = (
+  _manifest: HomeBindingManifest,
+  _descriptor: BindingSlotDescriptor | undefined,
+) => true;
+
+export const allowsCrossAreaEntityBindingUpstream = (
   manifest: HomeBindingManifest,
   descriptor: BindingSlotDescriptor | undefined,
 ) => {

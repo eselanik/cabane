@@ -108,10 +108,7 @@ export function DeviceMappingInspector({
       roomId: room.id,
       profile,
       runtime,
-      scope:
-        descriptor.kind === "opening-contact" || descriptor.kind === "opening-cover"
-          ? "all-areas"
-          : "mapped-area",
+      scope: "all-areas",
     });
     const currentCandidate = candidates.find((candidate) => candidate.entityId === current);
     const currentState = current ? runtime.entityStates[current] : undefined;
@@ -132,7 +129,7 @@ export function DeviceMappingInspector({
           : []),
         ...candidates.map((candidate) => ({
           value: candidate.entityId,
-          label: `${candidate.label}${descriptor.kind === "opening-contact" ? ` · ${candidate.areaLabel}` : ""}${candidate.stateLabel === "Available" ? "" : ` · ${candidate.stateLabel}`}${candidate.claimed ? " · already used" : ""}`,
+          label: `${candidate.label} · ${candidate.areaLabel}${candidate.stateLabel === "Available" ? "" : ` · ${candidate.stateLabel}`}${candidate.claimed ? " · already used" : ""}`,
           disabled: !candidate.selectable && candidate.entityId !== current,
         })),
       ],
@@ -323,13 +320,24 @@ export function DeviceMappingInspector({
                   : { label: "Other compatible entities", options: otherOptions },
               ]
             : []),
-          ...(alternativeOptions.length > 0
+          ...(candidates.some((candidate) => candidate.matchRank === 1)
             ? [
                 {
                   label: "Other switches · on/off only",
                   options: [],
                   collapsed: true,
-                  groups: byArea(candidates.filter((candidate) => candidate.matchRank > 0)),
+                  groups: byArea(candidates.filter((candidate) => candidate.matchRank === 1)),
+                },
+              ]
+            : []),
+          // Modified: every other entity type, grouped by area.
+          ...(candidates.some((candidate) => candidate.matchRank >= 2)
+            ? [
+                {
+                  label: "Any other entity · any type",
+                  options: [],
+                  collapsed: true,
+                  groups: byArea(candidates.filter((candidate) => candidate.matchRank >= 2)),
                 },
               ]
             : []),
@@ -600,7 +608,7 @@ export function DeviceMappingInspector({
               type="search"
               className="device-mapping-inspector__search"
               aria-label="Search compatible matches"
-              placeholder="Search compatible matches…"
+              placeholder="Search all Home Assistant entities…"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
