@@ -45,7 +45,15 @@ export function resolveProjectModels(
       } else {
         devices[model.id] = {
           ...descriptor,
-          component: () => <ImportedModelGeometry model={model} />,
+          // Modified: Cover models receive their entity state so a "cover-curtain" part can move.
+          component: (props) => (
+            <ImportedModelGeometry
+              model={model}
+              coverState={model.profile === "cover" ? props.state : undefined}
+              coverVisual={props.visualState}
+              reducedMotion={props.reducedMotion}
+            />
+          ),
           mountKind: model.placement === "wall" ? "wall" : "surface",
           supportedDomains: [model.profile],
           ...(model.profile === "light" && model.light ? { sceneLight: model.light } : {}),
